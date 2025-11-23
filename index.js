@@ -14,10 +14,7 @@ import { chromium } from "playwright";
 import { extractBranding } from "./lib/extractors.js";
 import { displayResults } from "./lib/display.js";
 import { writeFileSync, mkdirSync } from "fs";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import { join } from "path";
 
 program
   .name("dembrandt")
@@ -26,6 +23,9 @@ program
   .argument("<url>")
   .option("--json-only", "Output raw JSON")
   .option("-d, --debug", "Force visible browser")
+  .option("--verbose-colors", "Show medium and low confidence colors")
+  .option("--dark-mode", "Extract colors from dark mode")
+  .option("--mobile", "Extract from mobile viewport")
   .action(async (input, opts) => {
     let url = input;
     if (!url.match(/^https?:\/\//)) url = "https://" + url;
@@ -62,6 +62,8 @@ program
         try {
           result = await extractBranding(url, spinner, browser, {
             navigationTimeout: 90000,
+            darkMode: opts.darkMode,
+            mobile: opts.mobile,
           });
           break;
         } catch (err) {
@@ -97,7 +99,8 @@ program
             .toISOString()
             .replace(/[:.]/g, "-")
             .split(".")[0];
-          const outputDir = join(__dirname, "output", domain);
+          // Save to current working directory, not installation directory
+          const outputDir = join(process.cwd(), "output", domain);
           mkdirSync(outputDir, { recursive: true });
 
           const filename = `${timestamp}.json`;
@@ -122,7 +125,7 @@ program
       if (opts.jsonOnly) {
         console.log(JSON.stringify(result, null, 2));
       } else {
-        displayResults(result);
+        displayResults(result, { verboseColors: opts.verboseColors });
       }
     } catch (err) {
       spinner.fail("Failed");

@@ -1,6 +1,6 @@
 {
   "name": "dembrandt",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Extract design tokens and brand assets from any website",
   "main": "index.js",
   "type": "module",
@@ -14,7 +14,8 @@
   "scripts": {
     "start": "node index.js",
     "install-browser": "npx playwright install chromium",
-    "postinstall": "npx playwright install chromium --with-deps || echo 'Playwright install failed, you may need to run: npx playwright install chromium'"
+    "postinstall": "npx playwright install chromium --with-deps || echo 'Playwright install failed, you may need to run: npx playwright install chromium'",
+    "release": "./release.sh"
   },
   "keywords": [
     "design-tokens",

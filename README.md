@@ -6,7 +6,7 @@
 
 A CLI tool for extracting design tokens and brand assets from any website. Powered by Playwright with advanced bot detection avoidance.
 
-![Dembrandt Demo](showcase.gif)
+![Dembrandt Demo](showcase.png)
 
 ## Quick Start
 
@@ -21,13 +21,15 @@ No installation required! Extract design tokens from any website in seconds. Or 
 Dembrandt analyzes live websites and extracts their complete design system:
 
 - **Logo** — Logo detection (img/svg) with dimensions and source URL
-- **Colors** — Semantic colors, color palette with confidence scoring, CSS variables
+- **Favicons** — All favicon variants with sizes and types
+- **Colors** — Semantic colors, color palette with confidence scoring, CSS variables (both hex and RGB formats)
 - **Typography** — Font families, sizes, weights, line heights, font sources (Google Fonts, Adobe Fonts, custom)
 - **Spacing** — Margin and padding scales with grid system detection (4px/8px/custom)
 - **Border Radius** — Corner radius patterns with usage frequency
 - **Shadows** — Box shadow values for elevation systems
 - **Buttons** — Component styles with variants and states
 - **Inputs** — Form field styles (input, textarea, select)
+- **Links** — Link styles with hover states and decorations
 - **Breakpoints** — Responsive design breakpoints from media queries
 - **Icons** — Icon system detection (Font Awesome, Material Icons, SVG)
 - **Frameworks** — CSS framework detection (Tailwind, Bootstrap, Material-UI, Chakra)
@@ -147,6 +149,30 @@ dembrandt stripe.com --debug
 ```
 
 Useful for troubleshooting bot detection, timeouts, or extraction issues.
+
+**`--verbose-colors`** - Show medium and low confidence colors in terminal output
+
+```bash
+dembrandt stripe.com --verbose-colors
+```
+
+By default, only high-confidence colors are shown. Use this flag to see all detected colors.
+
+**`--dark-mode`** - Extract colors from dark mode
+
+```bash
+dembrandt stripe.com --dark-mode
+```
+
+Enables dark mode preference detection for sites that support it.
+
+**`--mobile`** - Extract from mobile viewport
+
+```bash
+dembrandt stripe.com --mobile
+```
+
+Simulates a mobile device viewport for responsive design token extraction.
 
 ## Output
 
@@ -324,12 +350,12 @@ Use `--debug` to see:
 
 ## Limitations
 
-- Captures default/light theme only (dark mode not detected)
+- Dark mode requires `--dark-mode` flag (not automatically detected)
 - Hover/focus states extracted from CSS (not fully interactive)
 - Canvas/WebGL-rendered sites cannot be analyzed (e.g., Tesla, Apple Vision Pro demos)
 - JavaScript-heavy sites require hydration time (8s initial + 4s stabilization)
 - Some dynamically-loaded content may be missed
-- Requires viewport simulation at 1920x1080
+- Default viewport is 1920x1080 (use `--mobile` for responsive analysis)
 
 ## Architecture
 
@@ -371,7 +397,9 @@ MIT
 
 ## Roadmap
 
-- [ ] Dark mode detection and extraction
+- [x] Dark mode extraction (via `--dark-mode` flag)
+- [x] Mobile viewport support (via `--mobile` flag)
+- [x] Clickable terminal links for modern terminals
 - [ ] Animation/transition detection
 - [ ] Interactive state capture (hover, focus, active)
 - [ ] Multi-page analysis

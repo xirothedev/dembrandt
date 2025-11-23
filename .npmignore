@@ -32,7 +32,7 @@ output/
 examples/
 
 # Media (not needed in npm package)
-showcase.gif
+showcase.png
 *.mp4
 *.mov
 
